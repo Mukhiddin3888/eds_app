@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_app_eds/screens/home/bloc/users_bloc.dart';
+import 'package:test_app_eds/screens/user_info/user_info_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -21,10 +23,28 @@ class HomeScreen extends StatelessWidget {
               return ListView.builder(
                   itemCount: state.users.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
-                      leading: CircleAvatar(),
-                    title:   Text('${state.users[index].name}'),
-                       subtitle:  Text('${state.users[index].userName}'),
+                    return GestureDetector(
+                      onTap: (){
+                        Navigator.push(context, CupertinoPageRoute(
+                          builder: (context) => UserInfoScreen(
+                            name: state.users[index].name,
+                            userName: state.users[index].userName,
+                            email: state.users[index].email,
+                            phone: state.users[index].phone,
+                            website: state.users[index].website,
+                            compName: state.users[index].company.name,
+                            bs: state.users[index].company.bs,
+                            street: state.users[index].address.street,
+                            suite: state.users[index].address.suite,
+                            city: state.users[index].address.city,
+
+                          ),));
+                      },
+                      child: ListTile(
+                        leading: CircleAvatar(),
+                      title:   Text('${state.users[index].name}'),
+                         subtitle:  Text('${state.users[index].userName}'),
+                      ),
                     );
                   },
                   );

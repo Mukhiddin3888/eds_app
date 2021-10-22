@@ -10,6 +10,7 @@ class UsersModel extends Equatable{
   final String name;
   final String userName;
   final String email;
+  final String phone;
   final AddressModel address;
   final String website;
   final CompanyModel company;
@@ -19,6 +20,7 @@ class UsersModel extends Equatable{
         required this.id,
         required this.name,
         required this.userName,
+        required this.phone,
         required this.email,
         required this.address,
         required this.website,
@@ -30,6 +32,7 @@ class UsersModel extends Equatable{
       id:json['id'],
       name: json['name'],
       userName: json['username'],
+      phone: json['phone'],
       email: json['email'],
       website: json['website'],
       address: AddressModel.fromJson(json['address']  as Map<String, dynamic> ),
@@ -37,8 +40,6 @@ class UsersModel extends Equatable{
 
     );
   }
-
-
 
   @override
   List<Object> get props => [id,name, userName, email,/* address*/ website,/* company*/];
