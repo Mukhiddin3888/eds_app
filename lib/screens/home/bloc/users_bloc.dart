@@ -30,6 +30,7 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
 
     try{
         final users = await RepositoryImpl().getUserInfo();
+
         yield UsersLoaded(users: users);
 
     }catch (e){

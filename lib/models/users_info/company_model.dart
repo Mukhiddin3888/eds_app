@@ -13,8 +13,8 @@ class CompanyModel extends Equatable{
 
   factory CompanyModel.fromJson(Map<String, dynamic> json) {
     return CompanyModel(
-        name: json['name'],
-        bs: json['bs']
+        name: json["name"],
+        bs: json["bs"]
     );
   }
 

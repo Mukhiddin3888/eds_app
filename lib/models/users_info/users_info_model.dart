@@ -41,5 +41,5 @@ class UsersModel extends Equatable{
 
 
   @override
-  List<Object> get props => [id,name, userName, email, address, website, company];
+  List<Object> get props => [id,name, userName, email,/* address*/ website,/* company*/];
 }

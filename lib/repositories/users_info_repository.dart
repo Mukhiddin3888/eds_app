@@ -19,10 +19,10 @@ class RepositoryImpl extends Repository {
     Dio _dio = Dio(DioSettings.dioBaseOptions);
 
     final Response response = await _dio.get('/users' );
-    print(response);
+   // print(response);
 
     if (response.statusCode! >= 200 && response.statusCode! < 300) {
-      List<UsersModel> users = (response.data['results'] as List)
+      List<UsersModel> users = (response.data as List)
           .map(
             (e) => UsersModel.fromJson(e as Map<String, dynamic>),
       )

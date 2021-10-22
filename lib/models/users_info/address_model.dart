@@ -15,9 +15,9 @@ class AddressModel extends Equatable{
 
   factory AddressModel.fromJson(Map<String, dynamic> json) {
     return AddressModel(
-      street: json['street'],
-      suite: json['suite'],
-      city: json['city'],
+      street: json["street"],
+      suite: json["suite"],
+      city: json["city"],
     );
   }
 
