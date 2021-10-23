@@ -23,6 +23,7 @@ class AlbumsListScreen extends StatelessWidget {
           itemBuilder: (BuildContext context, int index) {
         return GestureDetector(
           onTap: (){
+
             Navigator.push(context, CupertinoPageRoute(
               builder: (context) => AlbumsScreen(title: albums[index].title, photos: photos,),));
           },
