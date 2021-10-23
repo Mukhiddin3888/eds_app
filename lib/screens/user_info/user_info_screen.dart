@@ -7,6 +7,7 @@ import 'package:test_app_eds/screens/user_info/albums_bloc/albums_bloc.dart';
 import 'package:test_app_eds/screens/user_info/posts_bloc/posts_bloc.dart';
 import 'package:test_app_eds/utils/styles/styles.dart';
 import 'package:test_app_eds/utils/styles/utils.dart';
+import 'package:test_app_eds/widgets/error_button.dart';
 
 
 class UserInfoScreen extends StatelessWidget {
@@ -112,7 +113,9 @@ class UserInfoScreen extends StatelessWidget {
                         );
                       }
                       if(state is PostsError){
-                        return Text('Error while loading Posts');
+                        return ErrorButton(onTap: (){
+                          context.read<PostsBloc>().emit(PostsInitial());
+                        });
                       }else return SizedBox();
 
         },
@@ -164,7 +167,9 @@ class UserInfoScreen extends StatelessWidget {
                         );
                       }
                        if(state is LoadingError){
-                         return Text('Error while loading Posts');
+                         return ErrorButton(onTap: (){
+                           context.read<AlbumsBloc>().emit(AlbumsInitial());
+                         });
                        }
                       else return SizedBox();
 

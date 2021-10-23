@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_app_eds/models/posts/posts_model.dart';
 import 'package:test_app_eds/screens/posts_info/bloc/comments_bloc.dart';
+import 'package:test_app_eds/widgets/error_button.dart';
 
 class PostsInfoScreen extends StatelessWidget {
   const PostsInfoScreen({Key? key, required this.post}) : super(key: key);
@@ -12,7 +13,7 @@ class PostsInfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(title: Text('${post.title}'),),
       body: BlocProvider(
         create: (context) => CommentsBloc(),
         child: SingleChildScrollView(
@@ -48,7 +49,7 @@ class PostsInfoScreen extends StatelessWidget {
 
                   }
                   if(state is LoadingError){
-                    return Text('Error while loading Cooments');
+                    return ErrorButton(onTap: (){context.read<CommentsBloc>().emit(CommentsInitial());},);
                   }
                   else return SizedBox();
                 },
@@ -59,3 +60,5 @@ class PostsInfoScreen extends StatelessWidget {
     );
   }
 }
+
+

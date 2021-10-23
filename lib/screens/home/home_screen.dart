@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_app_eds/screens/home/bloc/users_bloc.dart';
+import 'package:test_app_eds/screens/user_info/albums_bloc/albums_bloc.dart';
 import 'package:test_app_eds/screens/user_info/user_info_screen.dart';
+import 'package:test_app_eds/widgets/error_button.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -51,8 +53,9 @@ class HomeScreen extends StatelessWidget {
                   },
                   );
             } else if (state is UsersError){
-              return Center(child: Text('Error Please Check'));
-            }else {
+              return ErrorButton(onTap: (){
+                context.read<AlbumsBloc>().emit(AlbumsInitial());
+              });            }else {
               return Text('userName');
             }
           },
