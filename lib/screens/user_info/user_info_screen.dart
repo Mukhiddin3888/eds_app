@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test_app_eds/screens/albums_list/albums_list_screen.dart';
 import 'package:test_app_eds/screens/posts_list/posts_list.dart';
 import 'package:test_app_eds/screens/user_info/albums_bloc/albums_bloc.dart';
 import 'package:test_app_eds/screens/user_info/posts_bloc/posts_bloc.dart';
 import 'package:test_app_eds/utils/styles/styles.dart';
+import 'package:test_app_eds/utils/styles/utils.dart';
 
 
 class UserInfoScreen extends StatelessWidget {
@@ -66,15 +68,9 @@ class UserInfoScreen extends StatelessWidget {
                       UserInfoItem(name: suite, title: '     ',),
                       UserInfoItem(name: city, title: '     ',),
 
-                      Row(
-                        children: [
-                          Align(
-                              alignment: Alignment.topLeft,
-                              child: Text('Posts',style: MyTextStyles.header2,)),
-                          Spacer(),
-                          Icon(Icons.arrow_forward_ios_rounded,size: 20,)
-                        ],
-                      ),
+                      Align(
+                          alignment: Alignment.topLeft,
+                          child: Text('Posts',style: MyTextStyles.header2,)),
 
                       BlocBuilder<PostsBloc, PostsState>(
         builder: (context, state) {
@@ -110,7 +106,7 @@ class UserInfoScreen extends StatelessWidget {
                                 child: GestureDetector(
                                     onTap: (){
                                       Navigator.push(context, CupertinoPageRoute(
-                                        builder: (context) => PostsList(posts: state.posts,),));
+                                        builder: (context) => PostsList(posts: state.posts,userName: userName,),));
                                     },
                                     child: Text('See all posts', style: MyTextStyles.header2.copyWith(color: Colors.blue),))),                          ],
                         );
@@ -144,6 +140,7 @@ class UserInfoScreen extends StatelessWidget {
                                 alignment: Alignment.topLeft,
                                 child: Text('${state.albums[0].title}', style: MyTextStyles.header2,)),
                             Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 AlbumPreViewItem(url: state.photos[0].thumbnailUrl,
                                   ),
@@ -153,6 +150,16 @@ class UserInfoScreen extends StatelessWidget {
                                   ),
                               ],
                             ),
+                            Align(
+                                alignment: Alignment.bottomRight,
+                                child: GestureDetector(
+                                    onTap: (){
+                                      Navigator.push(context, CupertinoPageRoute(
+                                        builder: (context) => AlbumsListScreen(
+                                          userName: userName, albums: state.albums, photos: state.photos,),));
+                                    },
+                                    child: Text('See all Albums', style: MyTextStyles.header2.copyWith(color: MyColors.blue),))),
+                            SizedBox(height: 24,)
                           ],
                         );
                       }
@@ -163,9 +170,7 @@ class UserInfoScreen extends StatelessWidget {
 
                           },
                         ),
-                      Align(
-                          alignment: Alignment.bottomRight,
-                          child: Text('See all Albums', style: MyTextStyles.header2.copyWith(color: Colors.blue),)),
+
 
                     ],
 

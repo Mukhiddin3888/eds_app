@@ -27,8 +27,8 @@ class AlbumsBloc extends Bloc<AlbumsEvent, AlbumsState> {
     yield AlbumsLoading();
 
     try{
-      final albums = await RepositoryImpl().getCurrentUserAlbums(userId: userId);
       final photos = await RepositoryImpl().getCurrentUserAlbumsPhoto(albumId: albumId);
+      final albums = await RepositoryImpl().getCurrentUserAlbums(userId: userId);
 
       yield AlbumsLoaded( albums: albums, photos: photos);
     }
