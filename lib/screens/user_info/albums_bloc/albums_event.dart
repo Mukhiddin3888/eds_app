@@ -10,6 +10,7 @@ abstract class AlbumsEvent extends Equatable {
 
 class GetAlbums extends AlbumsEvent{
   final int userId;
+  final int albumId;
 
-  GetAlbums({required this.userId});
+  GetAlbums({required this.userId, required this.albumId});
 }

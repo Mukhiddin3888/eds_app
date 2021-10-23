@@ -91,12 +91,15 @@ class UserInfoScreen extends StatelessWidget {
                           shrinkWrap: true,
                           itemCount: (state.posts.length  <= 3) && (state.posts.length > 0) ? state.posts.length : 3,
                           itemBuilder: (BuildContext context, int index) {
-                            return ListTile(
-                              title: Text('${state.posts[index].title}',style: MyTextStyles.header3,),
-                              subtitle: Text('${state.posts[index].body}',
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),);
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 4),
+                              child: ListTile(
+                                title: Text('${state.posts[index].title}',style: MyTextStyles.header3,),
+                                subtitle: Text('${state.posts[index].body}',
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),),
+                            );
                           },
                         );
                       }
@@ -109,26 +112,33 @@ class UserInfoScreen extends StatelessWidget {
                       Align(
                         alignment: Alignment.bottomRight,
                         child: Text('See all posts', style: MyTextStyles.header2.copyWith(color: Colors.blue),)),
-
               //TODO: implement better ui
                       BlocBuilder<AlbumsBloc, AlbumsState>(
                           builder: (context, state) {
                        if(state is AlbumsInitial){
-                          context.watch<AlbumsBloc>().add(GetAlbums(userId: id));
+                          context.watch<AlbumsBloc>().add(GetAlbums(userId: id, albumId:1 ));
                         return Container();
                       }
                         if(state is AlbumsLoading){
                           return Center(child: CircularProgressIndicator());
                       }
                       if(state is AlbumsLoaded){
-                        return Row(
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            AlbumPreViewItem(url: 'https://via.placeholder.com/150/24f355',
-                              title: state.albums[0].title,),
-                            AlbumPreViewItem(url: 'https://via.placeholder.com/150/24f355',
-                              title: state.albums[1].title,),
-                            AlbumPreViewItem(url: 'https://via.placeholder.com/150/24f355',
-                              title: state.albums[2].title,),
+                            Align(
+                                alignment: Alignment.topLeft,
+                                child: Text('${state.albums[0].title}', style: MyTextStyles.header2,)),
+                            Row(
+                              children: [
+                                AlbumPreViewItem(url: state.photos[0].thumbnailUrl,
+                                  ),
+                                AlbumPreViewItem(url: state.photos[1].thumbnailUrl,
+                                  ),
+                                AlbumPreViewItem(url: state.photos[2].thumbnailUrl,
+                                  ),
+                              ],
+                            ),
                           ],
                         );
                       }
@@ -157,11 +167,9 @@ class AlbumPreViewItem extends StatelessWidget {
   const AlbumPreViewItem({
     Key? key,
     required this.url,
-    required this.title,
   }) : super(key: key);
 
   final String url;
-  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -170,7 +178,6 @@ class AlbumPreViewItem extends StatelessWidget {
       margin: EdgeInsets.all(8),
       width: 64,
     height: 64,
-    child: Center(child: Text('$title', maxLines: 2, overflow: TextOverflow.ellipsis,)),
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(12),
       image: DecorationImage(image: NetworkImage(url)),

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:test_app_eds/models/albums/albums_model.dart';
+import 'package:test_app_eds/models/photos/photos_model.dart';
 import 'package:test_app_eds/repositories/users_info_repository.dart';
 
 part 'albums_event.dart';
@@ -16,19 +17,20 @@ class AlbumsBloc extends Bloc<AlbumsEvent, AlbumsState> {
     AlbumsEvent event,
   ) async* {
       if(event is GetAlbums){
-        yield* _mapGetAlbumsToState(event.userId);
+        yield* _mapGetAlbumsToState(userId: event.userId, albumId: event.albumId );
       }
   }
 
 
-  Stream<AlbumsState> _mapGetAlbumsToState(int userId) async* {
+  Stream<AlbumsState> _mapGetAlbumsToState({required int userId, required int albumId}) async* {
 
     yield AlbumsLoading();
 
     try{
       final albums = await RepositoryImpl().getCurrentUserAlbums(userId: userId);
+      final photos = await RepositoryImpl().getCurrentUserAlbumsPhoto(albumId: albumId);
 
-      yield AlbumsLoaded( albums: albums);
+      yield AlbumsLoaded( albums: albums, photos: photos);
     }
     catch (e){
       print(e);
