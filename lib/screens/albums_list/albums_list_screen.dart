@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:test_app_eds/models/albums/albums_model.dart';
 import 'package:test_app_eds/models/photos/photos_model.dart';
+import 'package:test_app_eds/screens/albums/albums_screen.dart';
 
 class AlbumsListScreen extends StatelessWidget {
   const AlbumsListScreen({Key? key,
@@ -19,10 +21,16 @@ class AlbumsListScreen extends StatelessWidget {
       body: ListView.builder(
         itemCount: albums.length,
           itemBuilder: (BuildContext context, int index) {
-        return ListTile(
-          trailing: Icon(Icons.keyboard_arrow_right),
-          leading: CircleAvatar(),
-          title:  Text('${albums[index].title}'),);
+        return GestureDetector(
+          onTap: (){
+            Navigator.push(context, CupertinoPageRoute(
+              builder: (context) => AlbumsScreen(title: albums[index].title, photos: photos,),));
+          },
+          child: ListTile(
+            trailing: Icon(Icons.keyboard_arrow_right),
+            leading: CircleAvatar(),
+            title:  Text('${albums[index].title}'),),
+        );
       },
       ),
     );

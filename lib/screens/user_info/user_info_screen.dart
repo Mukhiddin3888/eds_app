@@ -126,7 +126,7 @@ class UserInfoScreen extends StatelessWidget {
                       BlocBuilder<AlbumsBloc, AlbumsState>(
                           builder: (context, state) {
                        if(state is AlbumsInitial){
-                          context.watch<AlbumsBloc>().add(GetAlbums(userId: id, albumId:1 ));
+                          context.watch<AlbumsBloc>().add(GetAlbums(userId: id, albumId:id ));
                         return Container();
                       }
                         if(state is AlbumsLoading){
