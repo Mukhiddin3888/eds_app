@@ -12,13 +12,12 @@ class AlbumsLoading extends AlbumsState {}
 class AlbumsLoaded extends AlbumsState {
 
   final List<AlbumsModel> albums;
-  final List<PhotosModel> photos;
 
-  AlbumsLoaded({required this.albums, required this.photos});
+  AlbumsLoaded({required this.albums,});
 
 
   @override
-  List<Object> get props => [albums, photos];
+  List<Object> get props => [albums, ];
 
 }
 class LoadingError extends AlbumsState {

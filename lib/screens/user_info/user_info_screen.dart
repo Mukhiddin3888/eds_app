@@ -129,7 +129,7 @@ class UserInfoScreen extends StatelessWidget {
                       BlocBuilder<AlbumsBloc, AlbumsState>(
                           builder: (context, state) {
                        if(state is AlbumsInitial){
-                          context.watch<AlbumsBloc>().add(GetAlbums(userId: id, albumId:id ));
+                          context.watch<AlbumsBloc>().add(GetAlbums(userId: id, ));
                         return Container();
                       }
                         if(state is AlbumsLoading){
@@ -141,25 +141,28 @@ class UserInfoScreen extends StatelessWidget {
                           children: [
                             Align(
                                 alignment: Alignment.topLeft,
+                                child: Text('Albums', style: MyTextStyles.header2,)),
+                            SizedBox(height: 16,),
+                            Align(
+                                alignment: Alignment.topLeft,
                                 child: Text('${state.albums[0].title}', style: MyTextStyles.header2,)),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                AlbumPreViewItem(url: state.photos[0].thumbnailUrl,
-                                  ),
-                                AlbumPreViewItem(url: state.photos[1].thumbnailUrl,
-                                  ),
-                                AlbumPreViewItem(url: state.photos[2].thumbnailUrl,
-                                  ),
-                              ],
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              child: Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text('${state.albums[1].title}', style: MyTextStyles.header2,)),
                             ),
+                            Align(
+                                alignment: Alignment.topLeft,
+                                child: Text('${state.albums[2].title}', style: MyTextStyles.header2,)),
+
                             Align(
                                 alignment: Alignment.bottomRight,
                                 child: GestureDetector(
                                     onTap: (){
                                       Navigator.push(context, CupertinoPageRoute(
                                         builder: (context) => AlbumsListScreen(
-                                          userName: userName, albums: state.albums, photos: state.photos,),));
+                                          userName: userName, albums: state.albums,),));
                                     },
                                     child: Text('See all Albums', style: MyTextStyles.header2.copyWith(color: MyColors.blue),))),
                             SizedBox(height: 24,)
