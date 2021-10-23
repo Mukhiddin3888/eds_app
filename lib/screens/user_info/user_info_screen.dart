@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test_app_eds/screens/posts_list/posts_list.dart';
 import 'package:test_app_eds/screens/user_info/albums_bloc/albums_bloc.dart';
 import 'package:test_app_eds/screens/user_info/posts_bloc/posts_bloc.dart';
 import 'package:test_app_eds/utils/styles/styles.dart';
@@ -86,21 +87,32 @@ class UserInfoScreen extends StatelessWidget {
                         return Center(child: CircularProgressIndicator());
                       }
                       if(state is PostsLoaded){
-                        return ListView.builder(
-                          physics: ClampingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: (state.posts.length  <= 3) && (state.posts.length > 0) ? state.posts.length : 3,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 4),
-                              child: ListTile(
-                                title: Text('${state.posts[index].title}',style: MyTextStyles.header3,),
-                                subtitle: Text('${state.posts[index].body}',
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                ),),
-                            );
-                          },
+                        return Column(
+                          children: [
+                            ListView.builder(
+                              physics: ClampingScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: (state.posts.length  <= 3) && (state.posts.length > 0) ? state.posts.length : 3,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 4),
+                                  child: ListTile(
+                                    title: Text('${state.posts[index].title}',style: MyTextStyles.header3,),
+                                    subtitle: Text('${state.posts[index].body}',
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ),),
+                                );
+                              },
+                            ),
+                            Align(
+                                alignment: Alignment.bottomRight,
+                                child: GestureDetector(
+                                    onTap: (){
+                                      Navigator.push(context, CupertinoPageRoute(
+                                        builder: (context) => PostsList(posts: state.posts,),));
+                                    },
+                                    child: Text('See all posts', style: MyTextStyles.header2.copyWith(color: Colors.blue),))),                          ],
                         );
                       }
                       if(state is PostsError){
@@ -109,10 +121,12 @@ class UserInfoScreen extends StatelessWidget {
 
         },
 ),
-                      Align(
-                        alignment: Alignment.bottomRight,
-                        child: Text('See all posts', style: MyTextStyles.header2.copyWith(color: Colors.blue),)),
-              //TODO: implement better ui
+
+
+                      SizedBox(height: 8,),
+
+                      //TODO: implement better ui
+
                       BlocBuilder<AlbumsBloc, AlbumsState>(
                           builder: (context, state) {
                        if(state is AlbumsInitial){
