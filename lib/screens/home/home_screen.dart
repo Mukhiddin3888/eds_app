@@ -27,6 +27,7 @@ class HomeScreen extends StatelessWidget {
                       onTap: (){
                         Navigator.push(context, CupertinoPageRoute(
                           builder: (context) => UserInfoScreen(
+                            id: state.users[index].id,
                             name: state.users[index].name,
                             userName: state.users[index].userName,
                             email: state.users[index].email,

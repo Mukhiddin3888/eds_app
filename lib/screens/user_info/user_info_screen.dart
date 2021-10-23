@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test_app_eds/screens/user_info/bloc/posts_bloc.dart';
 import 'package:test_app_eds/utils/styles/styles.dart';
 
 
 class UserInfoScreen extends StatelessWidget {
   const UserInfoScreen({
     Key? key,
+    required this.id,
     required this.name,
     required this.userName,
     required this.email,
@@ -19,6 +22,7 @@ class UserInfoScreen extends StatelessWidget {
 
   }) : super(key: key);
 
+  final int id;
   final String name;
   final String userName;
   final String phone;
@@ -35,7 +39,9 @@ class UserInfoScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(userName),),
-      body: Padding(
+      body: BlocProvider(
+  create: (context) => PostsBloc(),
+  child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24),
         child: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
@@ -65,18 +71,37 @@ class UserInfoScreen extends StatelessWidget {
                 ],
               ),
 
-              ListView.builder(
-                physics: ClampingScrollPhysics(),
-                shrinkWrap: true,
-                  itemCount: 3,
+              BlocBuilder<PostsBloc, PostsState>(
+  builder: (context, state) {
+
+              if(state is PostsInitial){
+                context.watch<PostsBloc>().add(GetPosts(userId: id));
+                return Container();
+              }
+              if(state is PostsLoading){
+                return Center(child: CircularProgressIndicator());
+              }
+              if(state is PostsLoaded){
+                return ListView.builder(
+                  physics: ClampingScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: (state.posts.length  <= 3) && (state.posts.length > 0) ? state.posts.length : 3,
                   itemBuilder: (BuildContext context, int index) {
-                    return ListTile(title: Text('post title',style: MyTextStyles.header3,),
-                      subtitle: Text('title body iewnewrnerinfeje lkaj jnweanwjnwjn wjndwjnedn jnenwfndennw nwen',
+                    return ListTile(
+                      title: Text('${state.posts[index].title}',style: MyTextStyles.header3,),
+                      subtitle: Text('${state.posts[index].body}',
                         overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
+                        maxLines: 1,
                       ),);
                   },
-              ),
+                );
+              }
+              if(state is PostsError){
+                return Text('Error while loading Posts');
+              }else return SizedBox();
+
+  },
+),
               Align(
                 alignment: Alignment.bottomRight,
                 child: Text('See all posts', style: MyTextStyles.header2.copyWith(color: Colors.blue),)),
@@ -84,31 +109,10 @@ class UserInfoScreen extends StatelessWidget {
 //TODO: implement better ui
               Row(
                 children: [
-                Container(
-                  margin: EdgeInsets.all(8),
-                  width: 64,
-                height: 64,
-                child: Center(child: Text('title')),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  image: DecorationImage(image: NetworkImage('https://via.placeholder.com/150/d32776')),
-                ),),
-                Container(
-                  margin: EdgeInsets.all(8),
-                  width: 64,
-                height: 64,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  image: DecorationImage(image: NetworkImage('https://via.placeholder.com/150/f66b97')),
-                ),),
-                Container(
-                  margin: EdgeInsets.all(8),
-                width: 64,
-                height: 64,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12 ),
-                  image: DecorationImage(image: NetworkImage('https://via.placeholder.com/150/1ee8a4')),
-                ),),
+                AlbumPreViewItem(url: 'https://via.placeholder.com/150/24f355',
+                  title: 'jsk nvs ejcnsdcscvnds jncjds ',),
+                AlbumPreViewItem(url: 'https://via.placeholder.com/150/24f355',
+                  title: 'jsk nvs ejcnsdcscvnds jncjds ',),
                 ],
               ),
               Align(
@@ -117,14 +121,36 @@ class UserInfoScreen extends StatelessWidget {
 
             ],
 
-
-
-
-
           ),
         ),
       ),
+),
     );
+  }
+}
+
+class AlbumPreViewItem extends StatelessWidget {
+  const AlbumPreViewItem({
+    Key? key,
+    required this.url,
+    required this.title,
+  }) : super(key: key);
+
+  final String url;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(4),
+      margin: EdgeInsets.all(8),
+      width: 64,
+    height: 64,
+    child: Center(child: Text('$title', maxLines: 2, overflow: TextOverflow.ellipsis,)),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(12),
+      image: DecorationImage(image: NetworkImage(url)),
+    ),);
   }
 }
 
@@ -149,7 +175,7 @@ class UserInfoItem extends StatelessWidget {
             Text('$title ',style: MyTextStyles.header2,),
             Spacer(),
             Text('$name',style: MyTextStyles.body,),
-              Spacer(),
+          //    Spacer(),
             ],),
         ),
         Divider(),
