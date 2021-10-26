@@ -1,8 +1,13 @@
-import 'package:equatable/equatable.dart';
+import 'package:hive/hive.dart';
 
-class CompanyModel extends Equatable{
+part 'company_model.g.dart';
 
+@HiveType(typeId: 3)
+class CompanyModel extends HiveObject{
+
+  @HiveField(0)
   final String name;
+  @HiveField(1)
   final String bs;
 
   CompanyModel({
@@ -19,6 +24,4 @@ class CompanyModel extends Equatable{
   }
 
 
-  @override
-  List<Object> get props => [name,bs];
 }
