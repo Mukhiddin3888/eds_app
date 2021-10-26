@@ -54,7 +54,7 @@ class AlbumsScreen extends StatelessWidget {
             }
             if(state is LoadingError){
               return ErrorButton(onTap: (){
-                context.read<PhotosBloc>().emit(PhotosInitial());
+                context.read<PhotosBloc>().add(GetPhotos(albumId: index));
               });
             }
             else return SizedBox();
