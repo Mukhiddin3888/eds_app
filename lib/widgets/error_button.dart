@@ -18,7 +18,7 @@ class ErrorButton extends StatelessWidget {
               color: MyColors.blue,
               borderRadius: BorderRadius.circular(8)
           ),
-          child: Text('Error while loading Cooments',
+          child: Text('Error while loading',
             style: MyTextStyles.header3.copyWith(color: MyColors.white),)),
     );
   }
