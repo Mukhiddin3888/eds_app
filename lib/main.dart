@@ -26,6 +26,7 @@ void main() async {
   await Hive.openBox<List>('posts');
   await Hive.openBox<List>('albums');
   await Hive.openBox<List>('photos');
+  await Hive.openBox<List>('comments');
 
   // await Hive.openBox<List>('posts');
   runApp(MyApp());

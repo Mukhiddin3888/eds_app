@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
 import 'package:test_app_eds/models/posts/posts_model.dart';
 import 'package:test_app_eds/screens/posts_info/bloc/comments_bloc.dart';
 import 'package:test_app_eds/widgets/error_button.dart';
@@ -49,7 +50,23 @@ class PostsInfoScreen extends StatelessWidget {
 
                   }
                   if(state is LoadingError){
-                    return ErrorButton(onTap: (){context.read<CommentsBloc>().emit(CommentsInitial());},);
+                    var lcomments =  Hive.box<List>('comments').get('comment${post.id}')?? []  ;
+                    return lcomments.length > 0 ?
+
+                    ListView.builder(
+                      padding: EdgeInsets.all(8),
+                      physics: ClampingScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: lcomments.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          leading: CircleAvatar(),
+                          title: Text('${lcomments[index].email}'),
+                          subtitle: Text('${lcomments[index].body}'),
+                        );
+                      },)
+
+                     : ErrorButton(onTap: (){context.read<CommentsBloc>().add(GetComment(postId: post.id));},);
                   }
                   else return SizedBox();
                 },

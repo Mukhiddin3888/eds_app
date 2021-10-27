@@ -125,12 +125,15 @@ class RepositoryImpl extends Repository {
     // print(response);
 
     if (response.statusCode! >= 200 && response.statusCode! < 300) {
-      List<CommentsModel> photos = (response.data as List)
+      List<CommentsModel> comments = (response.data as List)
           .map(
             (e) => CommentsModel.fromJson(e as Map<String, dynamic>),
       )
           .toList();
-      return photos;
+
+      HiveStoreMe.putData(boxName: 'comments', keyWord: 'comment$postId', data: comments);
+
+      return comments;
     } else {
       throw ServerFailure();
     }
