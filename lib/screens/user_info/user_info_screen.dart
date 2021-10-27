@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:hive/hive.dart';
 import 'package:test_app_eds/screens/albums_list/albums_list_screen.dart';
 import 'package:test_app_eds/screens/posts_list/posts_list.dart';
 import 'package:test_app_eds/screens/user_info/albums_bloc/albums_bloc.dart';
@@ -74,7 +76,7 @@ class UserInfoScreen extends StatelessWidget {
                           child: Text('Posts',style: MyTextStyles.header2,)),
 
                       BlocBuilder<PostsBloc, PostsState>(
-        builder: (context, state) {
+                      builder: (context, state) {
 
                       if(state is PostsInitial){
                         context.watch<PostsBloc>().add(GetPosts(userId: id));
@@ -91,11 +93,12 @@ class UserInfoScreen extends StatelessWidget {
                               shrinkWrap: true,
                               itemCount: (state.posts.length  <= 3) && (state.posts.length > 0) ? state.posts.length : 3,
                               itemBuilder: (BuildContext context, int index) {
+
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(vertical: 4),
                                   child: ListTile(
-                                    title: Text('${state.posts[index].title}',style: MyTextStyles.header3,),
-                                    subtitle: Text('${state.posts[index].body}',
+                                    title: Text( '${state.posts[index].title}',style: MyTextStyles.header3,),
+                                    subtitle: Text( '${state.posts[index].body}',
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                     ),),
@@ -113,13 +116,47 @@ class UserInfoScreen extends StatelessWidget {
                         );
                       }
                       if(state is PostsError){
-                        return ErrorButton(onTap: (){
+                        Hive.openBox<List>('posts');
+                        var lposts =  Hive.box<List>('posts').get('post$id')?? []  ;
+
+                        return lposts.length > 0 ?
+                         Column(
+                          children: [
+                            ListView.builder(
+                              physics: ClampingScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: (lposts.length  <= 3) && (lposts.length > 0) ? lposts.length : 3,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 4),
+                                  child: ListTile(
+                                    title: Text('${lposts[index].title}',style: MyTextStyles.header3,),
+                                    subtitle: Text('${lposts[index].body}',
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ),),
+                                );
+                              },
+                            ),
+                            Align(
+                                alignment: Alignment.bottomRight,
+                                child: GestureDetector(
+                                    onTap: (){
+
+                                      Navigator.push(context, CupertinoPageRoute(
+                                        builder: (context) => PostsList(posts: lposts,userName: userName,),));
+                                    },
+                                    child: Text('See all posts', style: MyTextStyles.header2.copyWith(color: Colors.blue),))),                          ],
+                        )
+
+                        : ErrorButton(onTap: (){
                           context.read<PostsBloc>().add(GetPosts(userId: id));
                         });
-                      }else return SizedBox();
+                      }
+                      else return SizedBox();
 
-        },
-),
+                       },
+                  ),
 
 
                       SizedBox(height: 8,),
@@ -170,7 +207,42 @@ class UserInfoScreen extends StatelessWidget {
                         );
                       }
                        if(state is LoadingError){
-                         return ErrorButton(onTap: (){
+                         var lalbums =  Hive.box<List>('albums').get('album$id')?? []  ;
+                         return lalbums.length > 0 ?
+                         Column(
+                           mainAxisSize: MainAxisSize.min,
+                           children: [
+                             Align(
+                                 alignment: Alignment.topLeft,
+                                 child: Text('Albums', style: MyTextStyles.header2,)),
+                             SizedBox(height: 16,),
+                             Align(
+                                 alignment: Alignment.topLeft,
+                                 child: Text('${lalbums[0].title}', style: MyTextStyles.header2,)),
+                             Padding(
+                               padding: const EdgeInsets.symmetric(vertical: 8),
+                               child: Align(
+                                   alignment: Alignment.topLeft,
+                                   child: Text('${lalbums[1].title}', style: MyTextStyles.header2,)),
+                             ),
+                             Align(
+                                 alignment: Alignment.topLeft,
+                                 child: Text('${lalbums[2].title}', style: MyTextStyles.header2,)),
+
+                             Align(
+                                 alignment: Alignment.bottomRight,
+                                 child: GestureDetector(
+                                     onTap: (){
+                                       Navigator.push(context, CupertinoPageRoute(
+                                         builder: (context) => AlbumsListScreen(
+                                           userName: userName, albums: lalbums,),));
+                                     },
+                                     child: Text('See all Albums', style: MyTextStyles.header2.copyWith(color: MyColors.blue),))),
+                             SizedBox(height: 24,)
+                           ],
+                         )
+
+                             : ErrorButton(onTap: (){
                            context.read<AlbumsBloc>().add(GetAlbums(userId: id));
                          });
                        }

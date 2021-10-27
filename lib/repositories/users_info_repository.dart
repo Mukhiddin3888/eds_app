@@ -1,9 +1,9 @@
 
 
 import 'package:dio/dio.dart';
-import 'package:hive/hive.dart';
 import 'package:test_app_eds/core/errors/failure.dart';
 import 'package:test_app_eds/core/network/dio_settings.dart';
+import 'package:test_app_eds/core/storage/hive.dart';
 import 'package:test_app_eds/models/albums/albums_model.dart';
 import 'package:test_app_eds/models/comments/comments_model.dart';
 import 'package:test_app_eds/models/photos/photos_model.dart';
@@ -38,7 +38,7 @@ class RepositoryImpl extends Repository {
           .toList();
 
 
-        await Hive.box<List<UsersModel>>('users').put('key', users);
+      HiveStoreMe.putData(boxName: 'users', keyWord: 'key', data: users);
 
 
 
@@ -60,9 +60,16 @@ class RepositoryImpl extends Repository {
       List<UserPostsModel> posts = (response.data as List)
           .map(
             (e) => UserPostsModel.fromJson(e as Map<String, dynamic>),
-      )
-          .toList();
+      ).toList();
+
+
+      HiveStoreMe.putData(boxName: 'posts', keyWord: 'post$userId', data: posts);
+
+
+
+
       return posts;
+
     } else {
       throw ServerFailure();
     }
@@ -80,6 +87,9 @@ class RepositoryImpl extends Repository {
             (e) => AlbumsModel.fromJson(e as Map<String, dynamic>),
       )
           .toList();
+
+      HiveStoreMe.putData(boxName: 'albums', keyWord: 'album$userId', data: albums);
+
       return albums;
     } else {
       throw ServerFailure();
@@ -99,6 +109,9 @@ class RepositoryImpl extends Repository {
             (e) => PhotosModel.fromJson(e as Map<String, dynamic>),
       )
           .toList();
+
+      HiveStoreMe.putData(boxName: 'photos', keyWord: 'photo$albumId', data: photos);
+
       return photos;
     } else {
       throw ServerFailure();
@@ -112,12 +125,15 @@ class RepositoryImpl extends Repository {
     // print(response);
 
     if (response.statusCode! >= 200 && response.statusCode! < 300) {
-      List<CommentsModel> photos = (response.data as List)
+      List<CommentsModel> comments = (response.data as List)
           .map(
             (e) => CommentsModel.fromJson(e as Map<String, dynamic>),
       )
           .toList();
-      return photos;
+
+      HiveStoreMe.putData(boxName: 'comments', keyWord: 'comment$postId', data: comments);
+
+      return comments;
     } else {
       throw ServerFailure();
     }

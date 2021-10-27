@@ -1,11 +1,18 @@
 
-import 'package:equatable/equatable.dart';
+import 'package:hive/hive.dart';
 
-class UserPostsModel extends Equatable {
+part 'posts_model.g.dart';
 
+@HiveType(typeId: 4)
+class UserPostsModel extends HiveObject {
+
+  @HiveField(0)
   final int id;
+  @HiveField(1)
   final int userId;
+  @HiveField(2)
   final String title;
+  @HiveField(3)
   final String body;
 
   UserPostsModel({
@@ -27,7 +34,5 @@ class UserPostsModel extends Equatable {
   }
 
 
-  @override
-  List<Object> get props => [id,userId,title,body];
 
 }

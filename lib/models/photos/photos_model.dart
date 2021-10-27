@@ -1,12 +1,20 @@
-import 'package:equatable/equatable.dart';
-
-class PhotosModel extends Equatable {
+import 'package:hive/hive.dart';
 
 
+part 'photos_model.g.dart';
+
+@HiveType(typeId: 7)
+class PhotosModel extends HiveObject {
+
+  @HiveField(0)
   final int albumId;
+  @HiveField(1)
   final int id;
+  @HiveField(2)
   final String title;
+  @HiveField(3)
   final String url;
+  @HiveField(4)
   final String thumbnailUrl;
 
   PhotosModel({
@@ -30,6 +38,4 @@ class PhotosModel extends Equatable {
 
 
 
-  @override
-  List<Object> get props => [albumId,id,title,url,thumbnailUrl];
 }

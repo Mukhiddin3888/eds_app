@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
 import 'package:test_app_eds/screens/albums/bloc/photos_bloc.dart';
 import 'package:test_app_eds/widgets/error_button.dart';
 
@@ -53,7 +54,30 @@ class AlbumsScreen extends StatelessWidget {
 
             }
             if(state is LoadingError){
-              return ErrorButton(onTap: (){
+              var lphotos =  Hive.box<List>('photos').get('photo$index')?? []  ;
+              return lphotos.length > 0 ?
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: GridView.builder(
+                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                        maxCrossAxisExtent: 200,
+                        childAspectRatio: 2 / 2,
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 16),
+                    itemCount: lphotos.length,
+                    itemBuilder: (BuildContext ctx, index) {
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text('${ lphotos[index].title}', ),
+                          CachedNetworkImage(imageUrl: '${lphotos[index].url}', height: 96,width: 96,),
+
+                        ],
+                      );
+                    }),
+              )
+
+                : ErrorButton(onTap: (){
                 context.read<PhotosBloc>().add(GetPhotos(albumId: index));
               });
             }

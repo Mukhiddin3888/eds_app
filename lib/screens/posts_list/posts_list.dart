@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:test_app_eds/models/posts/posts_model.dart';
 import 'package:test_app_eds/screens/posts_info/posts_info_screen.dart';
 
 class PostsList extends StatelessWidget {
@@ -9,7 +8,7 @@ class PostsList extends StatelessWidget {
     required this.posts}) : super(key: key);
 
   final String userName;
-  final List<UserPostsModel> posts;
+  final List posts;
 
 
   @override
