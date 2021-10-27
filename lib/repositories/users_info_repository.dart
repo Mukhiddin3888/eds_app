@@ -1,6 +1,7 @@
 
 
 import 'package:dio/dio.dart';
+import 'package:hive/hive.dart';
 import 'package:test_app_eds/core/errors/failure.dart';
 import 'package:test_app_eds/core/network/dio_settings.dart';
 import 'package:test_app_eds/models/albums/albums_model.dart';
@@ -35,6 +36,12 @@ class RepositoryImpl extends Repository {
             (e) => UsersModel.fromJson(e as Map<String, dynamic>),
       )
           .toList();
+
+
+        await Hive.box<List<UsersModel>>('users').put('key', users);
+
+
+
       return users;
     } else {
       throw ServerFailure();

@@ -14,6 +14,7 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
   @override
   Stream<UsersState> mapEventToState(
     UsersEvent event,
+
   ) async* {
 
     if(event is GetUsers){
@@ -29,6 +30,7 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
     yield UsersLoading();
 
     try{
+
         final users = await RepositoryImpl().getUserInfo();
 
         yield UsersLoaded(users: users);

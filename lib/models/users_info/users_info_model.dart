@@ -1,18 +1,29 @@
 
 
-import 'package:equatable/equatable.dart';
+import 'package:hive/hive.dart';
 import 'package:test_app_eds/models/users_info/address_model.dart';
 import 'package:test_app_eds/models/users_info/company_model.dart';
 
-class UsersModel extends Equatable{
+part 'users_info_model.g.dart';
 
+@HiveType(typeId: 0)
+class UsersModel extends HiveObject{
+
+  @HiveField(0)
   final int id;
+  @HiveField(1)
   final String name;
+  @HiveField(2)
   final String userName;
+  @HiveField(3)
   final String email;
+  @HiveField(4)
   final String phone;
+  @HiveField(5)
   final AddressModel address;
+  @HiveField(6)
   final String website;
+  @HiveField(7)
   final CompanyModel company;
 
   UsersModel(
@@ -40,7 +51,4 @@ class UsersModel extends Equatable{
 
     );
   }
-
-  @override
-  List<Object> get props => [id,name, userName, email,/* address*/ website,/* company*/];
 }

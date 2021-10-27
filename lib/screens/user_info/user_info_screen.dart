@@ -114,7 +114,7 @@ class UserInfoScreen extends StatelessWidget {
                       }
                       if(state is PostsError){
                         return ErrorButton(onTap: (){
-                          context.read<PostsBloc>().emit(PostsInitial());
+                          context.read<PostsBloc>().add(GetPosts(userId: id));
                         });
                       }else return SizedBox();
 
@@ -171,7 +171,7 @@ class UserInfoScreen extends StatelessWidget {
                       }
                        if(state is LoadingError){
                          return ErrorButton(onTap: (){
-                           context.read<AlbumsBloc>().emit(AlbumsInitial());
+                           context.read<AlbumsBloc>().add(GetAlbums(userId: id));
                          });
                        }
                       else return SizedBox();

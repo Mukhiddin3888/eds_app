@@ -1,9 +1,15 @@
-import 'package:equatable/equatable.dart';
+import 'package:hive/hive.dart';
 
-class AddressModel extends Equatable{
+part 'address_model.g.dart';
 
+@HiveType(typeId: 1)
+class AddressModel extends HiveObject{
+
+  @HiveField(0)
   final String street;
+  @HiveField(1)
   final String suite;
+  @HiveField(2)
   final String city;
 
   AddressModel({
@@ -22,6 +28,4 @@ class AddressModel extends Equatable{
   }
 
 
-  @override
-  List<Object> get props => [street,suite,city];
 }
