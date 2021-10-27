@@ -54,7 +54,7 @@ class RepositoryImpl extends Repository {
     Dio _dio = Dio(DioSettings.dioBaseOptions);
 
     final Response response = await _dio.get('/posts?userId=$userId' );
-     print(response);
+    // print(response);
 
     if (response.statusCode! >= 200 && response.statusCode! < 300) {
       List<UserPostsModel> posts = (response.data as List)
@@ -87,6 +87,9 @@ class RepositoryImpl extends Repository {
             (e) => AlbumsModel.fromJson(e as Map<String, dynamic>),
       )
           .toList();
+
+      HiveStoreMe.putData(boxName: 'albums', keyWord: 'album$userId', data: albums);
+
       return albums;
     } else {
       throw ServerFailure();

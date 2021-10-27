@@ -155,8 +155,8 @@ class UserInfoScreen extends StatelessWidget {
                       }
                       else return SizedBox();
 
-        },
-),
+                       },
+                  ),
 
 
                       SizedBox(height: 8,),
@@ -207,7 +207,42 @@ class UserInfoScreen extends StatelessWidget {
                         );
                       }
                        if(state is LoadingError){
-                         return ErrorButton(onTap: (){
+                         var lalbums =  Hive.box<List>('albums').get('album$id')?? []  ;
+                         return lalbums.length > 0 ?
+                         Column(
+                           mainAxisSize: MainAxisSize.min,
+                           children: [
+                             Align(
+                                 alignment: Alignment.topLeft,
+                                 child: Text('Albums', style: MyTextStyles.header2,)),
+                             SizedBox(height: 16,),
+                             Align(
+                                 alignment: Alignment.topLeft,
+                                 child: Text('${lalbums[0].title}', style: MyTextStyles.header2,)),
+                             Padding(
+                               padding: const EdgeInsets.symmetric(vertical: 8),
+                               child: Align(
+                                   alignment: Alignment.topLeft,
+                                   child: Text('${lalbums[1].title}', style: MyTextStyles.header2,)),
+                             ),
+                             Align(
+                                 alignment: Alignment.topLeft,
+                                 child: Text('${lalbums[2].title}', style: MyTextStyles.header2,)),
+
+                             Align(
+                                 alignment: Alignment.bottomRight,
+                                 child: GestureDetector(
+                                     onTap: (){
+                                       Navigator.push(context, CupertinoPageRoute(
+                                         builder: (context) => AlbumsListScreen(
+                                           userName: userName, albums: lalbums,),));
+                                     },
+                                     child: Text('See all Albums', style: MyTextStyles.header2.copyWith(color: MyColors.blue),))),
+                             SizedBox(height: 24,)
+                           ],
+                         )
+
+                             : ErrorButton(onTap: (){
                            context.read<AlbumsBloc>().add(GetAlbums(userId: id));
                          });
                        }

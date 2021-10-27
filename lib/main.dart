@@ -24,6 +24,7 @@ void main() async {
   Hive..registerAdapter(PhotosModelAdapter());
   await Hive.openBox<List>('users');
   await Hive.openBox<List>('posts');
+  await Hive.openBox<List>('albums');
 
   // await Hive.openBox<List>('posts');
   runApp(MyApp());

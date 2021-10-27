@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:test_app_eds/models/albums/albums_model.dart';
 import 'package:test_app_eds/screens/albums/albums_screen.dart';
 
 class AlbumsListScreen extends StatelessWidget {
@@ -9,7 +8,7 @@ class AlbumsListScreen extends StatelessWidget {
     required this.albums}) : super(key: key);
 
   final String userName;
-  final List<AlbumsModel> albums;
+  final List albums;
 
   @override
   Widget build(BuildContext context) {
