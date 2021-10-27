@@ -6,10 +6,21 @@ import 'package:hive/hive.dart';
 import 'package:test_app_eds/screens/home/bloc/users_bloc.dart';
 import 'package:test_app_eds/screens/user_info/user_info_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
 
+class _HomeScreenState extends State<HomeScreen> {
+
+  @override
+  void dispose() {
+
+    Hive.box('users').close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
