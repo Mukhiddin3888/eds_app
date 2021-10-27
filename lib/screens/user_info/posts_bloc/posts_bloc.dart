@@ -27,8 +27,8 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
 
     try{
       final posts = await RepositoryImpl().getCurrentUserPosts(userId: userId);
-
       yield PostsLoaded(posts: posts);
+
     }
     catch (e){
       print(e);

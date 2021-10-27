@@ -1,9 +1,9 @@
 
 
 import 'package:dio/dio.dart';
-import 'package:hive/hive.dart';
 import 'package:test_app_eds/core/errors/failure.dart';
 import 'package:test_app_eds/core/network/dio_settings.dart';
+import 'package:test_app_eds/core/storage/hive.dart';
 import 'package:test_app_eds/models/albums/albums_model.dart';
 import 'package:test_app_eds/models/comments/comments_model.dart';
 import 'package:test_app_eds/models/photos/photos_model.dart';
@@ -38,7 +38,7 @@ class RepositoryImpl extends Repository {
           .toList();
 
 
-        await Hive.box<List<UsersModel>>('users').put('key', users);
+      HiveStoreMe.putData(boxName: 'users', keyWord: 'key', data: users);
 
 
 
@@ -54,15 +54,22 @@ class RepositoryImpl extends Repository {
     Dio _dio = Dio(DioSettings.dioBaseOptions);
 
     final Response response = await _dio.get('/posts?userId=$userId' );
-    // print(response);
+     print(response);
 
     if (response.statusCode! >= 200 && response.statusCode! < 300) {
       List<UserPostsModel> posts = (response.data as List)
           .map(
             (e) => UserPostsModel.fromJson(e as Map<String, dynamic>),
-      )
-          .toList();
+      ).toList();
+
+
+      HiveStoreMe.putData(boxName: 'posts', keyWord: 'post$userId', data: posts);
+
+
+
+
       return posts;
+
     } else {
       throw ServerFailure();
     }
