@@ -2,7 +2,7 @@ import 'package:hive/hive.dart';
 
 part 'company_model.g.dart';
 
-@HiveType(typeId: 3)
+@HiveType(typeId: 2)
 class CompanyModel extends HiveObject{
 
   @HiveField(0)

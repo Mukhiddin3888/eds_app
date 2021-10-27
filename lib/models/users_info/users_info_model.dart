@@ -6,7 +6,7 @@ import 'package:test_app_eds/models/users_info/company_model.dart';
 
 part 'users_info_model.g.dart';
 
-@HiveType(typeId: 1)
+@HiveType(typeId: 0)
 class UsersModel extends HiveObject{
 
   @HiveField(0)
