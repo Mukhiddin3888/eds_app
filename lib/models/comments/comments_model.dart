@@ -36,6 +36,14 @@ class CommentsModel extends HiveObject{
         body: json["body"]
     );
   }
+  Map<String, dynamic> toJson() => {
+    "postId": postId,
+    "id": id,
+    "name": name,
+    "email": email,
+    "body": body,
+
+  };
 
 
 

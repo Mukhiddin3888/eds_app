@@ -18,6 +18,8 @@ abstract class Repository{
  Future<List<AlbumsModel>> getCurrentUserAlbums({required int userId});
  Future<List<PhotosModel>> getCurrentUserAlbumsPhoto({required int albumId});
 
+ Future<void> postCurrentUserPostsComments({required int postId,required CommentsModel commentsModel});
+
 }
 
 class RepositoryImpl extends Repository {
@@ -75,6 +77,7 @@ class RepositoryImpl extends Repository {
     }
   }
 
+  @override
   Future<List<AlbumsModel>> getCurrentUserAlbums({required int userId}) async {
     Dio _dio = Dio(DioSettings.dioBaseOptions);
 
@@ -138,6 +141,26 @@ class RepositoryImpl extends Repository {
       throw ServerFailure();
     }
   }
+
+  @override
+  Future<void> postCurrentUserPostsComments({required int postId, required CommentsModel commentsModel}) async {
+    Dio _dio = Dio(DioSettings.dioBaseOptions);
+    final Response response = await _dio.post(
+      '/comments?postId=$postId',
+      data: commentsModel,
+    );
+    print('/comment/');
+    print('postId = $postId');
+    print(response.data);
+    print(response.statusCode);
+    if (response.statusCode! >= 200 && response.statusCode! < 300) {
+    } else {
+      throw ServerFailure();
+    }
+
+  }
+
+
 
 
 }

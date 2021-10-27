@@ -11,6 +11,5 @@ abstract class CommentsEvent extends Equatable {
 
 class GetComment extends CommentsEvent{
   final int postId;
-
   GetComment({required this.postId});
 }
