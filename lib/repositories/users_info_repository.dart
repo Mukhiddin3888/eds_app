@@ -109,6 +109,9 @@ class RepositoryImpl extends Repository {
             (e) => PhotosModel.fromJson(e as Map<String, dynamic>),
       )
           .toList();
+
+      HiveStoreMe.putData(boxName: 'photos', keyWord: 'photo$albumId', data: photos);
+
       return photos;
     } else {
       throw ServerFailure();
