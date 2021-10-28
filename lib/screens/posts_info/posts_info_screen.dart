@@ -58,42 +58,10 @@ class PostsInfoScreen extends StatelessWidget {
                             showModalBottomSheet(
                                 context: context,
                                 builder: (context) {
-                                  return SingleChildScrollView(
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 24),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: <Widget>[
-                                          Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text('Comment',style: MyTextStyles.header2,)),
-
-
-                                          CustomTextField(controller: controllerName, maxLines: 2, hint: 'Name',inputType: TextInputType.name, ),
-                                          CustomTextField(controller: controllerEmail, maxLines: 1, hint: 'E-mail',inputType: TextInputType.emailAddress,),
-                                          CustomTextField(controller: controllerBody, maxLines: 4, hint: 'Comments',inputType: TextInputType.text,),
-                                          GestureDetector(
-                                            onTap:  (){
-                                              controllerName.clear();
-                                              controllerEmail.clear();
-                                              controllerBody.clear();
-                                            } ,
-
-                                            child: Container(
-                                                alignment: Alignment.center,
-                                                height: 48,
-                                                width: double.infinity,
-                                                decoration: BoxDecoration(
-                                                    color: MyColors.blue,
-                                                    borderRadius: BorderRadius.circular(8)
-                                                ),
-                                                child: Text('Send',style: MyTextStyles.header2.copyWith(color: MyColors.white),)),
-                                          ),
-
-
-                                        ],
-                                      ),
-                                    ),
+                                  return BottomSheetComments(onSendTap: () { Navigator.pop(context); },
+                                  controllerBody: controllerBody,
+                                    controllerEmail: controllerEmail,
+                                    controllerName: controllerName,
                                   );
                                 });
 
