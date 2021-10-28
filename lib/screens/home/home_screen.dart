@@ -37,74 +37,59 @@ class _HomeScreenState extends State<HomeScreen> {
               return Center(child: CircularProgressIndicator());
             }
             else if(state is UsersLoaded){
-              return ListView.builder(
-                itemCount: state.users.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return GestureDetector(
-                    onTap: (){
-
-                      Navigator.push(context, CupertinoPageRoute(
-                        builder: (context) => UserInfoScreen(
-                          id: state.users[index].id,
-                          name: state.users[index].name,
-                          userName: state.users[index].userName,
-                          email: state.users[index].email,
-                          phone: state.users[index].phone,
-                          website: state.users[index].website,
-                          compName: state.users[index].company.name,
-                          bs: state.users[index].company.bs,
-                          street: state.users[index].address.street,
-                          suite: state.users[index].address.suite,
-                          city: state.users[index].address.city,
-
-                        ),));
-                    },
-                    child: ListTile(
-                      leading: CircleAvatar(),
-                      title:   Text('${state.users[index].name}'),
-                      subtitle:  Text('${state.users[index].userName}'),
-                    ),
-                  );
-                },
-              );
+              return UsersInfoItems(state: state.users,);
             } else if (state is UsersError){
               var ldata =  Hive.box<List>('users').get('key')! ;
-              return ListView.builder(
-                itemCount: ldata.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return GestureDetector(
-                    onTap: (){
-
-                      Navigator.push(context, CupertinoPageRoute(
-                        builder: (context) => UserInfoScreen(
-                          id: ldata[index].id,
-                          name: ldata[index].name,
-                          userName: ldata[index].userName,
-                          email: ldata[index].email,
-                          phone: ldata[index].phone,
-                          website: ldata[index].website,
-                          compName: ldata[index].company.name,
-                          bs: ldata[index].company.bs,
-                          street: ldata[index].address.street,
-                          suite: ldata[index].address.suite,
-                          city: ldata[index].address.city,
-
-                        ),));
-                    },
-                    child: ListTile(
-                      leading: CircleAvatar(),
-                      title:   Text('${ldata[index].name}'),
-                      subtitle:  Text('${ldata[index].userName}'),
-                    ),
-                  );
-                },
-              );
+              return  UsersInfoItems(state: ldata,);
             }else {
               return Text('userName');
             }
           },
         ),
       )
+    );
+  }
+}
+
+class UsersInfoItems extends StatelessWidget {
+  const UsersInfoItems({
+    Key? key,
+    required this.state,
+  }) : super(key: key);
+
+  final state;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: state.length,
+      itemBuilder: (BuildContext context, int index) {
+        return GestureDetector(
+          onTap: (){
+
+            Navigator.push(context, CupertinoPageRoute(
+              builder: (context) => UserInfoScreen(
+                id: state[index].id,
+                name: state[index].name,
+                userName: state[index].userName,
+                email: state[index].email,
+                phone: state[index].phone,
+                website: state[index].website,
+                compName: state[index].company.name,
+                bs: state[index].company.bs,
+                street: state[index].address.street,
+                suite: state[index].address.suite,
+                city: state[index].address.city,
+
+              ),));
+          },
+          child: ListTile(
+            leading: CircleAvatar(),
+            title:   Text('${state[index].name}'),
+            subtitle:  Text('${state[index].userName}'),
+          ),
+        );
+      },
     );
   }
 }
