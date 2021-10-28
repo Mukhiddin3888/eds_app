@@ -64,7 +64,7 @@ class UsersInfoItems extends StatelessWidget {
     return ListView.builder(
       itemCount: state.length,
       itemBuilder: (BuildContext context, int index) {
-        return GestureDetector(
+        return InkWell(
           onTap: (){
 
             Navigator.push(context, CupertinoPageRoute(

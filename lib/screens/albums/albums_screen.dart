@@ -40,9 +40,11 @@ class AlbumsScreen extends StatelessWidget {
               return lphotos.length > 0 ?
               AlbumsPhotoItems(state: lphotos,)
 
-                : ErrorButton(onTap: (){
-                context.read<PhotosBloc>().add(GetPhotos(albumId: index));
-              });
+                : Center(
+                  child: ErrorButton(onTap: (){
+                  context.read<PhotosBloc>().add(GetPhotos(albumId: index));
+              }),
+                );
             }
             else return SizedBox();
           },
