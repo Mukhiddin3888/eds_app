@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 import 'package:test_app_eds/screens/home/bloc/users_bloc.dart';
 import 'package:test_app_eds/screens/user_info/user_info_screen.dart';
+import 'package:test_app_eds/widgets/error_button.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -40,7 +41,13 @@ class _HomeScreenState extends State<HomeScreen> {
               return UsersInfoItems(state: state.users,);
             } else if (state is UsersError){
               var ldata =  Hive.box<List>('users').get('key')! ;
-              return  UsersInfoItems(state: ldata,);
+              return ldata.length >0 ? UsersInfoItems(state: ldata,)
+              : ErrorButton(onTap: (){
+                context
+                    .read<UsersBloc>()
+                    .add(GetUsers());
+              })
+              ;
             }else {
               return Text('userName');
             }
