@@ -145,8 +145,6 @@ class UserInfoScreen extends StatelessWidget {
                   height: 8,
                 ),
 
-                //TODO: implement better ui
-
                 BlocBuilder<AlbumsBloc, AlbumsState>(
                   builder: (context, state) {
                     if (state is AlbumsInitial) {
