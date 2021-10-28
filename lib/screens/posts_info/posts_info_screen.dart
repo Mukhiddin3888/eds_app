@@ -73,7 +73,11 @@ class PostsInfoScreen extends StatelessWidget {
                                           CustomTextField(controller: controllerEmail, maxLines: 1, hint: 'E-mail',inputType: TextInputType.emailAddress,),
                                           CustomTextField(controller: controllerBody, maxLines: 4, hint: 'Comments',inputType: TextInputType.text,),
                                           GestureDetector(
-                                            onTap:  (){ } ,
+                                            onTap:  (){
+                                              controllerName.clear();
+                                              controllerEmail.clear();
+                                              controllerBody.clear();
+                                            } ,
 
                                             child: Container(
                                                 alignment: Alignment.center,
