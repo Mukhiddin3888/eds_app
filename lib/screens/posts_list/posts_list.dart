@@ -18,12 +18,12 @@ class PostsList extends StatelessWidget {
       body: ListView.builder(
         itemCount: posts.length,
         itemBuilder: (context, index) {
-        return GestureDetector(
-          onTap: (){
-            Navigator.push(context, CupertinoPageRoute(builder: (context) => PostsInfoScreen(post: posts[index],),));
-          },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4),
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: InkWell(
+            onTap: (){
+              Navigator.push(context, CupertinoPageRoute(builder: (context) => PostsInfoScreen(post: posts[index],),));
+            },
             child: ListTile(
               leading: CircleAvatar(),
               title: Text('${posts[index].title}'),

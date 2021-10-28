@@ -28,7 +28,7 @@ class BottomSheetComments extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Text('Comment',style: MyTextStyles.header2,)),
 
-            CustomTextField(controller: controllerName, maxLines: 2, hint: 'Name',inputType: TextInputType.name, ),
+            CustomTextField(controller: controllerName, maxLines: 1, hint: 'Name',inputType: TextInputType.name, ),
             CustomTextField(controller: controllerEmail, maxLines: 1, hint: 'E-mail',inputType: TextInputType.emailAddress,),
             CustomTextField(controller: controllerBody, maxLines: 4, hint: 'Comments',inputType: TextInputType.text,),
             GestureDetector(
@@ -70,7 +70,6 @@ class CustomTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 8),
-      height: 56,
       child: TextField(
         controller: controller,
         maxLines: maxLines,

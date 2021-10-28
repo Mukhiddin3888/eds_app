@@ -18,7 +18,7 @@ class AlbumsListScreen extends StatelessWidget {
         itemCount: albums.length,
           itemBuilder: (BuildContext context, int index) {
 
-        return GestureDetector(
+        return InkWell(
           onTap: (){
 
             Navigator.push(context, CupertinoPageRoute(

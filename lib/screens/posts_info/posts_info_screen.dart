@@ -52,75 +52,29 @@ class PostsInfoScreen extends StatelessWidget {
                   if(state is CommentsLoaded){
                     return Column(
                       children: [
-                        ListView.builder(
-                          padding: EdgeInsets.all(8),
-                          physics: ClampingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: state.comments.length,
-                          itemBuilder: (context, index) {
-                            return ListTile(
-                              isThreeLine: true,
-                              minVerticalPadding: 8,
-                              leading: CircleAvatar(),
-                              title: Text('${state.comments[index].name}'),
-                              subtitle: Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: Text('${state.comments[index].body}',),
-                              ),
-
-
-                            );
-                          },),
+                        CommentsListItem(state: state.comments,),
                         GestureDetector(
                           onTap: (){
                             showModalBottomSheet(
                                 context: context,
                                 builder: (context) {
-                                  return SingleChildScrollView(
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 24),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: <Widget>[
-                                          Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text('Comment',style: MyTextStyles.header2,)),
-
-
-                                          CustomTextField(controller: controllerName, maxLines: 2, hint: 'Name',inputType: TextInputType.name, ),
-                                          CustomTextField(controller: controllerEmail, maxLines: 1, hint: 'E-mail',inputType: TextInputType.emailAddress,),
-                                          CustomTextField(controller: controllerBody, maxLines: 4, hint: 'Comments',inputType: TextInputType.text,),
-                                          GestureDetector(
-                                            onTap:  (){ } ,
-
-                                            child: Container(
-                                                alignment: Alignment.center,
-                                                height: 48,
-                                                width: double.infinity,
-                                                decoration: BoxDecoration(
-                                                    color: MyColors.blue,
-                                                    borderRadius: BorderRadius.circular(8)
-                                                ),
-                                                child: Text('Send',style: MyTextStyles.header2.copyWith(color: MyColors.white),)),
-                                          ),
-
-
-                                        ],
-                                      ),
-                                    ),
+                                  return BottomSheetComments(onSendTap: () { Navigator.pop(context); },
+                                  controllerBody: controllerBody,
+                                    controllerEmail: controllerEmail,
+                                    controllerName: controllerName,
                                   );
                                 });
 
                           },
                           child: Container(
+                            margin: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
                               alignment: Alignment.center,
                               height: 48,
-                              width: double.infinity,
                               decoration: BoxDecoration(
                                   color: MyColors.blue,
-                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(8),topRight: Radius.circular(8))
+                                  borderRadius: BorderRadius.circular(8)
                               ),
-                              child: Text('Post comments',style: MyTextStyles.header2.copyWith(color: MyColors.white),)),
+                              child: Text('Post comments',style: MyTextStyles.header3.copyWith(color: MyColors.white),)),
                         ),
                       ],
                     );
@@ -130,18 +84,20 @@ class PostsInfoScreen extends StatelessWidget {
                     var lcomments =  Hive.box<List>('comments').get('comment${post.id}')?? []  ;
                     return lcomments.length > 0 ?
 
-                    ListView.builder(
-                      padding: EdgeInsets.all(8),
-                      physics: ClampingScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: lcomments.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          leading: CircleAvatar(),
-                          title: Text('${lcomments[index].email}'),
-                          subtitle: Text('${lcomments[index].body}'),
-                        );
-                      },)
+                    Column(
+                      children: [
+                        CommentsListItem(state: lcomments,),
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
+                            alignment: Alignment.center,
+                            height: 48,
+                            decoration: BoxDecoration(
+                                color: MyColors.blue,
+                                borderRadius: BorderRadius.circular(8)
+                            ),
+                            child: Text('Please be Online to Post Comments',style: MyTextStyles.header3.copyWith(color: MyColors.white),)),
+                      ],
+                    )
 
                      : ErrorButton(onTap: (){context.read<CommentsBloc>().add(GetComment(postId: post.id));},);
                   }
@@ -153,6 +109,38 @@ class PostsInfoScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class CommentsListItem extends StatelessWidget {
+  const CommentsListItem({
+    Key? key,
+    required this.state,
+  }) : super(key: key);
+
+  final state;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      padding: EdgeInsets.all(8),
+      physics: ClampingScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: state.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          isThreeLine: true,
+          minVerticalPadding: 8,
+          leading: CircleAvatar(),
+          title: Text('${state[index].name}'),
+          subtitle: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Text('${state[index].body}',),
+          ),
+
+
+        );
+      },);
   }
 }
 
