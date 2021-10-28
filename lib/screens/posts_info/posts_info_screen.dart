@@ -28,13 +28,16 @@ class PostsInfoScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              ListTile(
-                minVerticalPadding: 8,
-                //leading: CircleAvatar(),
-                title: Text('${post.title}'),
-                subtitle: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('${post.body}'),
+              Align(
+                alignment: Alignment.centerRight,
+                child: ListTile(
+                  minVerticalPadding: 8,
+                  //leading: CircleAvatar(),
+                  title: Text('${post.title}'),
+                  subtitle: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('${post.body}'),
+                  ),
                 ),
               ),
               SizedBox(height: 24,),
