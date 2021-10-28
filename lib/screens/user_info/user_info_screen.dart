@@ -4,10 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:hive/hive.dart';
 import 'package:test_app_eds/screens/albums_list/albums_list_screen.dart';
-import 'package:test_app_eds/screens/posts_info/posts_info_screen.dart';
-import 'package:test_app_eds/screens/posts_list/posts_list.dart';
 import 'package:test_app_eds/screens/user_info/albums_bloc/albums_bloc.dart';
 import 'package:test_app_eds/screens/user_info/posts_bloc/posts_bloc.dart';
+import 'package:test_app_eds/screens/user_info/widgets/posts_preview.dart';
 import 'package:test_app_eds/utils/styles/styles.dart';
 import 'package:test_app_eds/utils/styles/utils.dart';
 import 'package:test_app_eds/widgets/error_button.dart';
@@ -63,13 +62,15 @@ class UserInfoScreen extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 24),
-                  child: CircleAvatar(
-                    radius: 48,
+                  child: Column(
+                    children: [
+                      CircleAvatar(
+                        radius: 48,
+                      ),
+                      SizedBox(height: 16,),
+                      Text('Hello $name', style: MyTextStyles.header2,)
+                    ],
                   ),
-                ),
-                UserInfoItem(
-                  name: name,
-                  title: 'Name',
                 ),
                 UserInfoItem(
                   name: email,
@@ -85,25 +86,26 @@ class UserInfoScreen extends StatelessWidget {
                 ),
                 UserInfoItem(
                   name: compName,
-                  title: 'Company',
+                  title: 'Company Name',
                 ),
                 UserInfoItem(
                   name: bs,
-                  title: '     ',
-                ),
-                UserInfoItem(
-                  name: street,
-                  title: 'Address',
-                ),
-                UserInfoItem(
-                  name: suite,
-                  title: '     ',
+                  title: 'BS ',
                 ),
                 UserInfoItem(
                   name: city,
-                  title: '     ',
+                  title: 'City',
+                ),
+                UserInfoItem(
+                  name: street,
+                  title: 'Street',
+                ),
+                UserInfoItem(
+                  name: suite,
+                  title: 'Suite',
                 ),
 
+                SizedBox(height: 24,),
                 Align(
                     alignment: Alignment.topLeft,
                     child: Text(
@@ -121,123 +123,14 @@ class UserInfoScreen extends StatelessWidget {
                       return Center(child: CircularProgressIndicator());
                     }
                     if (state is PostsLoaded) {
-                      return Column(
-                        children: [
-                          ListView.builder(
-                            physics: ClampingScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: (state.posts.length <= 3) &&
-                                    (state.posts.length > 0)
-                                ? state.posts.length
-                                : 3,
-                            itemBuilder: (BuildContext context, int index) {
-                              return GestureDetector(
-                                onTap: (){
-                                  Navigator.push(context, CupertinoPageRoute(builder: (context) => PostsInfoScreen(post: state.posts[index]),));
-                                },
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 4),
-                                  child: ListTile(
-                                    title: Text(
-                                      '${state.posts[index].title}',
-                                      style: MyTextStyles.header3,
-                                    ),
-                                    subtitle: Text(
-                                      '${state.posts[index].body}',
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                          Align(
-                              alignment: Alignment.bottomRight,
-                              child: GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        CupertinoPageRoute(
-                                          builder: (context) => PostsList(
-                                            posts: state.posts,
-                                            userName: userName,
-                                          ),
-                                        ));
-                                  },
-                                  child: Text(
-                                    'See all posts',
-                                    style: MyTextStyles.header2
-                                        .copyWith(color: Colors.blue),
-                                  ))),
-                        ],
-                      );
+                      return PostsPreView(userName: userName, state: state.posts,);
                     }
                     if (state is PostsError) {
                       Hive.openBox<List>('posts');
                       var lposts = Hive.box<List>('posts').get('post$id') ?? [];
 
                       return lposts.length > 0
-                          ? Column(
-                              children: [
-                                ListView.builder(
-                                  physics: ClampingScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemCount: (lposts.length <= 3) &&
-                                          (lposts.length > 0)
-                                      ? lposts.length
-                                      : 3,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return GestureDetector(
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            CupertinoPageRoute(
-                                              builder: (context) =>
-                                                  PostsInfoScreen(
-                                                      post: lposts[index]),
-                                            ));
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 4),
-                                        child: ListTile(
-                                          title: Text(
-                                            '${lposts[index].title}',
-                                            style: MyTextStyles.header3,
-                                          ),
-                                          subtitle: Text(
-                                            '${lposts[index].body}',
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                                Align(
-                                    alignment: Alignment.bottomRight,
-                                    child: GestureDetector(
-                                        onTap: () {
-                                          Navigator.push(
-                                              context,
-                                              CupertinoPageRoute(
-                                                builder: (context) => PostsList(
-                                                  posts: lposts,
-                                                  userName: userName,
-                                                ),
-                                              ));
-                                        },
-                                        child: Text(
-                                          'See all posts',
-                                          style: MyTextStyles.header2
-                                              .copyWith(color: Colors.blue),
-                                        ))),
-                              ],
-                            )
+                          ? PostsPreView(userName: userName, state: lposts)
                           : ErrorButton(onTap: () {
                               context
                                   .read<PostsBloc>()
@@ -404,6 +297,7 @@ class UserInfoScreen extends StatelessWidget {
   }
 }
 
+
 class AlbumPreViewItem extends StatelessWidget {
   const AlbumPreViewItem({
     Key? key,
@@ -447,14 +341,13 @@ class UserInfoItem extends StatelessWidget {
             children: [
               Text(
                 '$title ',
-                style: MyTextStyles.header2,
+                style: MyTextStyles.header3.copyWith(color: MyColors.grey),
               ),
               Spacer(),
               Text(
                 '$name',
                 style: MyTextStyles.body,
               ),
-              //    Spacer(),
             ],
           ),
         ),
