@@ -26,24 +26,23 @@ class PostsPreView extends StatelessWidget {
               ? state.length
               : 3,
           itemBuilder: (BuildContext context, int index) {
-            return GestureDetector(
-              onTap: (){
-                Navigator.push(context, CupertinoPageRoute(builder: (context) => PostsInfoScreen(post: state.posts[index]),));
-              },
-              child: Padding(
-                padding:
-                const EdgeInsets.symmetric(vertical: 4),
-                child: ListTile(
-                  title: Text(
-                    '${state[index].title}',
-                    style: MyTextStyles.header3,
-                  ),
-                  subtitle: Text(
-                    '${state[index].body}',
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                  ),
+            return Padding(
+              padding:
+              const EdgeInsets.symmetric(vertical: 4),
+              child: ListTile(
+                onTap: (){
+                  Navigator.push(context, CupertinoPageRoute(builder: (context) => PostsInfoScreen(post: state[index]),));
+                },
+                title: Text(
+                  '${state[index].title}',
+                  style: MyTextStyles.header3,
                 ),
+                subtitle: Text(
+                  '${state[index].body}',
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+                trailing: Icon(Icons.keyboard_arrow_right),
               ),
             );
           },
