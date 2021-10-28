@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 import 'package:test_app_eds/screens/albums/bloc/photos_bloc.dart';
+import 'package:test_app_eds/utils/styles/styles.dart';
 import 'package:test_app_eds/widgets/error_button.dart';
 
 
@@ -31,51 +32,13 @@ class AlbumsScreen extends StatelessWidget {
             }
             if(state is PhotosLoaded){
 
-              return Padding(
-                padding: const EdgeInsets.all(16),
-                child: GridView.builder(
-                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 200,
-                        childAspectRatio: 2 / 2,
-                        crossAxisSpacing: 16,
-                        mainAxisSpacing: 16),
-                    itemCount: state.photos.length,
-                    itemBuilder: (BuildContext ctx, index) {
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                             Text('${ state.photos[index].title}', ),
-                              CachedNetworkImage(imageUrl: '${state.photos[index].url}', height: 96,width: 96,),
-
-                        ],
-                      );
-                    }),
-              );
+              return AlbumsPhotoItems(state: state.photos,);
 
             }
             if(state is LoadingError){
               var lphotos =  Hive.box<List>('photos').get('photo$index')?? []  ;
               return lphotos.length > 0 ?
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: GridView.builder(
-                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 200,
-                        childAspectRatio: 2 / 2,
-                        crossAxisSpacing: 16,
-                        mainAxisSpacing: 16),
-                    itemCount: lphotos.length,
-                    itemBuilder: (BuildContext ctx, index) {
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text('${ lphotos[index].title}', ),
-                          CachedNetworkImage(imageUrl: '${lphotos[index].url}', height: 96,width: 96,),
-
-                        ],
-                      );
-                    }),
-              )
+              AlbumsPhotoItems(state: lphotos,)
 
                 : ErrorButton(onTap: (){
                 context.read<PhotosBloc>().add(GetPhotos(albumId: index));
@@ -85,6 +48,40 @@ class AlbumsScreen extends StatelessWidget {
           },
         ),
       ),
+    );
+  }
+}
+
+class AlbumsPhotoItems extends StatelessWidget {
+  const AlbumsPhotoItems({
+    Key? key,
+    required this.state
+  }) : super(key: key);
+
+  final state;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: GridView.builder(
+        physics: BouncingScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 300,
+              childAspectRatio: 3 / 3,
+              crossAxisSpacing: 8,
+              mainAxisSpacing: 24),
+          itemCount: state.length,
+          itemBuilder: (BuildContext ctx, index) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                    CachedNetworkImage(imageUrl: '${state[index].url}', height: 110,width: 110,),
+                    Text('${ state[index].title}',style: MyTextStyles.body, maxLines: 2, ),
+
+              ],
+            );
+          }),
     );
   }
 }
